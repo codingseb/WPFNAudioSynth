@@ -46,17 +46,10 @@ namespace SynthTests
 
         public static Note GetNoteFromKeyboardKey(Key key)
         {
-            if (KeyboardLayout.Instance.WhiteKeys.Contains(key))
-            {
-                return BaseNotes.GetNoteAtIndex(KeyboardLayout.Instance.WhiteKeys.IndexOf(key));
-            }
-            else if (KeyboardLayout.Instance.BlackKeys.Contains(key))
-            {
-                return HalfNotes.GetNoteAtIndex(KeyboardLayout.Instance.BlackKeys.IndexOf(key));
-            }
+            return BaseNotes.GetNoteAtIndex(KeyboardLayout.Instance.WhiteKeys.IndexOf(key)) ?? HalfNotes.GetNoteAtIndex(KeyboardLayout.Instance.BlackKeys.IndexOf(key));
         }
 
-        protected static Note GetNoteAtIndex(this ObservableCollection<Note> notes, int index)
+        internal static Note GetNoteAtIndex(this ObservableCollection<Note> notes, int index)
         {
             if (index >= 0 && index < notes.Count && !notes[index].Name.Equals("-"))
                 return notes[index];
