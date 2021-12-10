@@ -1,0 +1,78 @@
+﻿<Window x:Class="SynthTests.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SynthTests"
+        mc:Ignorable="d"
+        PreviewKeyDown="Window_PreviewKeyDown"
+        PreviewKeyUp="Window_PreviewKeyUp"
+        Title="MainWindow" Height="140" Width="800">
+    <DockPanel>
+
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+            <ComboBox ItemsSource="{Binding Source={x:Static local:SynthSettings.SignalTypes}}"
+                      SelectedValue="{Binding Source={x:Static local:SynthSettings.Instance}, Path=SignalType}" />
+        </StackPanel>
+        
+        <Grid>
+            <ItemsControl ItemsSource="{Binding Source={x:Static local:Notes.BaseNotes}}" >
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type local:Note}">
+                        <Border Width="20"
+                                BorderBrush="Gray"
+                                BorderThickness="0,1,1,0"
+                                Background="{Binding InPlay, Converter={BoolToBrushConverter FalseValue=White, TrueValue=#cff}}"
+                                PreviewMouseDown="Button_MouseDown"
+                                PreviewMouseUp="Button_MouseUp"
+                                MouseLeave="Border_MouseLeave"
+                                MouseEnter="Border_MouseEnter"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <Grid HorizontalAlignment="Stretch" 
+                  VerticalAlignment="Stretch"
+                  Margin="10,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <ItemsControl ItemsSource="{Binding Source={x:Static local:Notes.HalfNotes}}" >
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplateSelector>
+                        <local:BlackKeyOrEmptySpaceTemplateSelector>
+                            <local:BlackKeyOrEmptySpaceTemplateSelector.BlackKeyTemplate>
+                                <DataTemplate DataType="{x:Type local:Note}">
+                                    <Border Width="10"
+                                            Margin="5,0"
+                                            BorderBrush="Gray"
+                                            BorderThickness="1"
+                                            Background="{Binding InPlay, Converter={BoolToBrushConverter FalseValue=Black, TrueValue=#cff}}"
+                                            PreviewMouseDown="Button_MouseDown"
+                                            PreviewMouseUp="Button_MouseUp"
+                                            MouseLeave="Border_MouseLeave"
+                                            MouseEnter="Border_MouseEnter"/>
+                                </DataTemplate>
+                            </local:BlackKeyOrEmptySpaceTemplateSelector.BlackKeyTemplate>
+                            <local:BlackKeyOrEmptySpaceTemplateSelector.EmptySpaceTemplate>
+                                <DataTemplate DataType="{x:Type local:Note}">
+                                    <Border Width="20" />
+                                </DataTemplate>
+                            </local:BlackKeyOrEmptySpaceTemplateSelector.EmptySpaceTemplate>
+                        </local:BlackKeyOrEmptySpaceTemplateSelector>
+                    </ItemsControl.ItemTemplateSelector>
+                </ItemsControl>
+            </Grid>
+        
+        </Grid>
+    </DockPanel>
+</Window>
